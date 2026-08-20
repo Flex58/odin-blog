@@ -38,3 +38,24 @@ exports.createRefreshToken = async (userId, expiryDate) => {
   });
   return data;
 };
+
+exports.getRefreshToken = async (token) => {
+  const data = await prisma.refreshToken.findUnique({
+    where: {
+      token,
+    },
+    include: {
+      user: true,
+    },
+  });
+  return data;
+};
+
+exports.deleteRefreshToken = async (token) => {
+  const data = await prisma.refreshToken.delete({
+    where: {
+      token,
+    },
+  });
+  return data;
+};
