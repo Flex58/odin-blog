@@ -28,3 +28,13 @@ exports.createUser = async (email, name, password) => {
   });
   return data;
 };
+
+exports.createRefreshToken = async (userId, expiryDate) => {
+  const data = await prisma.refreshToken.create({
+    data: {
+      userId,
+      expiryDate,
+    },
+  });
+  return data;
+};
