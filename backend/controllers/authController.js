@@ -2,6 +2,8 @@ const { body, validationResult, matchedData } = require("express-validator");
 const db = require("../lib/queries");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const { issueAccessToken } = require("../utils/issueAccessToken");
+const { createRefreshToken } = require("../utils/createRefreshToken");
 require("dotenv").config();
 
 const formValidation = [
@@ -59,3 +61,35 @@ exports.createUser = [
     return res.status(201).json(user);
   },
 ];
+
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await db.getUserByEmail(email);
+
+  if (!user) {
+    return res.status(401).json({ error: "Email or Password incorrect" });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    return res.status(401).json({ error: "Email or Password incorrect" });
+  }
+
+  const payload = {
+    email: user.email,
+    id: user.id,
+  };
+
+  const accessToken = issueAccessToken(payload);
+  const { refreshToken, maxAge } = await createRefreshToken(user.id);
+  return res
+    .status(200)
+    .cookie("refreshToken", refreshToken, {
+      httponly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
+    })
+    .json({ accessToken });
+};
