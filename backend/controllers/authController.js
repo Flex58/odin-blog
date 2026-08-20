@@ -87,7 +87,7 @@ exports.loginUser = async (req, res) => {
   return res
     .status(200)
     .cookie("refreshToken", refreshToken, {
-      httponly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "strict",
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
@@ -124,10 +124,30 @@ exports.refreshToken = async (req, res) => {
   return res
     .status(200)
     .cookie("refreshToken", newRefreshToken, {
-      httponly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "strict",
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
     })
     .json({ accessToken: newAccessToken });
+};
+
+exports.logoutUser = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    res.status(400).json({ error: "Something went wrong" });
+  }
+  await db.deleteRefreshToken(req.cookies.refreshToken);
+  return res
+    .status(200)
+    .clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
+    .json({ message: "Logged out successfully" });
+};
+
+exports.whoAmI = (req, res) => {
+  return res.status(200).json(req.user);
 };
