@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const { issueAccessToken } = require("../utils/issueAccessToken");
 const { createRefreshToken } = require("../utils/createRefreshToken");
+const { verifyRefreshToken } = require("../utils/verifyRefreshToken");
 require("dotenv").config();
 
 const formValidation = [
@@ -92,4 +93,41 @@ exports.loginUser = async (req, res) => {
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
     })
     .json({ accessToken });
+};
+
+exports.refreshToken = async (req, res) => {
+  const oldToken = req.cookie("refreshToken");
+  const refreshToken = await db.getRefreshToken(oldToken);
+
+  if (!refreshToken) {
+    return res.status(403).json({ error: "invalid refresh token" });
+  }
+
+  const isExpired = verifyRefreshToken(refreshToken);
+
+  if (isExpired) {
+    await db.deleteRefreshToken(refreshToken.token);
+    return res.status(403).json({ error: "Refresh token is expired" });
+  }
+
+  const payload = {
+    email: refreshToken.user.email,
+    id: refreshToken.user.id,
+  };
+
+  await db.deleteRefreshToken(refreshToken);
+  const newAccessToken = issueAccessToken(payload);
+  const { refreshToken: newRefreshToken, maxAge } = await createRefreshToken(
+    payload.id,
+  );
+
+  return res
+    .status(200)
+    .cookie("refreshToken", newRefreshToken, {
+      httponly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
+    })
+    .json({ accessToken: newAccessToken });
 };
