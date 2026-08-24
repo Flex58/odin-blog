@@ -37,7 +37,7 @@ const formValidation = [
   body("confirm")
     .notEmpty()
     .withMessage("Password doesn't match")
-    .custom((confirm, { req }) => {
+    .custom(async (confirm, { req }) => {
       if (confirm !== req.body.password) {
         throw new Error("Password doesn't match");
       }
@@ -49,7 +49,7 @@ exports.createUser = [
   formValidation,
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({
         errors: errors.array(),
         email: req.body.email,
@@ -149,5 +149,10 @@ exports.logoutUser = async (req, res) => {
 };
 
 exports.whoAmI = (req, res) => {
-  return res.status(200).json(req.user);
+  console.log(req);
+  return res.status(200).json({
+    email: req.user.email,
+    name: req.user.name,
+    author: req.user.author,
+  });
 };
