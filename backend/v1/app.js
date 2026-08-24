@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
-//const cors = require("cors");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const { authRouter } = require("./routers/authRouter.js");
 
 require("./config/passport.js");
@@ -11,7 +12,9 @@ const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
-//app.use(cors({origin:}))
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
 
