@@ -149,7 +149,6 @@ exports.logoutUser = async (req, res) => {
 };
 
 exports.whoAmI = (req, res) => {
-  console.log(req);
   return res.status(200).json({
     email: req.user.email,
     name: req.user.name,
