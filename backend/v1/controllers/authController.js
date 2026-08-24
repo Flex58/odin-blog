@@ -1,7 +1,6 @@
 const { body, validationResult, matchedData } = require("express-validator");
 const db = require("../lib/queries");
 const bcrypt = require("bcryptjs");
-const passport = require("passport");
 const { issueAccessToken } = require("../utils/issueAccessToken");
 const { createRefreshToken } = require("../utils/createRefreshToken");
 const { verifyRefreshToken } = require("../utils/verifyRefreshToken");
