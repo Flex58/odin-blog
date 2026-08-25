@@ -91,16 +91,16 @@ exports.createPost = async (data, authorId) => {
       text: data.content,
       published: data.published,
       authorId,
-      upload: Date.now(),
+      upload: new Date(),
     },
   });
   return post;
 };
 
-exports.updatePost = async (postId, data, authorId) => {
+exports.updatePost = async (id, data, authorId) => {
   const post = await prisma.posts.update({
     where: {
-      postId,
+      id,
       authorId,
     },
     data: {
@@ -126,6 +126,9 @@ exports.getSpecificPost = async (id) => {
     where: {
       id,
     },
+    include: {
+      comments: true,
+    },
   });
   return data;
 };
@@ -139,7 +142,7 @@ exports.createComment = async (data, authorId) => {
   const post = await prisma.comments.create({
     data: {
       text: data.content,
-      upload: Date.now(),
+      upload: new Date(),
       authorId,
       postId: data.postId,
     },
