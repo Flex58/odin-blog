@@ -165,3 +165,12 @@ exports.getPostByAuthorAndId = async (authorId, id) => {
   });
   return data;
 };
+
+exports.getCommentById = async (id) => {
+  const data = await prisma.comments.findUnique({
+    where: {
+      id,
+    },
+  });
+  return data;
+};
