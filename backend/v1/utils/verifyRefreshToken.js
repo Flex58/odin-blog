@@ -1,3 +1,4 @@
 exports.verifyRefreshToken = (token) => {
-  return token.expiryDate.getTime() < new Date.getTime();
+  const date = new Date();
+  return token.expiryDate.getTime() < date.getTime();
 };
