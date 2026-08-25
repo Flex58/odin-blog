@@ -155,3 +155,13 @@ exports.deleteComment = async (id) => {
   });
   return data;
 };
+
+exports.getPostByAuthorAndId = async (authorId, id) => {
+  const data = await prisma.posts.findUnique({
+    where: {
+      id,
+      authorId,
+    },
+  });
+  return data;
+};
