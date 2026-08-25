@@ -62,3 +62,15 @@ exports.deleteRefreshToken = async (token) => {
   });
   return data;
 };
+
+exports.updateAuthor = async (id, author) => {
+  const data = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      author,
+    },
+  });
+  return data;
+};
