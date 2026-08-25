@@ -76,7 +76,11 @@ exports.updateAuthor = async (id, author) => {
 };
 
 exports.getPosts = async () => {
-  const data = await prisma.posts.findMany();
+  const data = await prisma.posts.findMany({
+    include: {
+      comments: true,
+    },
+  });
   return data;
 };
 
