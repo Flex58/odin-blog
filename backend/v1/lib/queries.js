@@ -79,3 +79,15 @@ exports.getPosts = async () => {
   const data = await prisma.posts.findMany();
   return data;
 };
+
+exports.createPost = async (data, authorId) => {
+  const post = await prisma.posts.create({
+    data: {
+      title: data.title,
+      text: data.content,
+      published: data.published,
+      authorId,
+    },
+  });
+  return post;
+};
