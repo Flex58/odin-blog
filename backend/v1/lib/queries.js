@@ -146,3 +146,12 @@ exports.createComment = async (data, authorId) => {
   });
   return post;
 };
+
+exports.deleteComment = async (id) => {
+  const data = await prisma.comments.delete({
+    where: {
+      id,
+    },
+  });
+  return data;
+};
