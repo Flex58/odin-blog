@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const commentController = require("../controllers/commentController");
 const { isAuth } = require("../middleware/isAuth");
+const { isOwnerOrPostOwner } = require("../middleware/isOwnerOrPostOwner");
 
 const commentRouter = Router();
 
@@ -12,3 +13,5 @@ commentRouter.delete(
   isOwnerOrPostOwner,
   commentController.deleteComment,
 );
+
+module.exports = { commentRouter };
