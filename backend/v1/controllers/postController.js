@@ -1,9 +1,4 @@
-const {
-  body,
-  vaildationResult,
-  matchedData,
-  validationResult,
-} = require("express-validator");
+const { body, validationResult, matchedData } = require("express-validator");
 const db = require("../lib/queries");
 const { createContext } = require("react");
 
@@ -28,7 +23,7 @@ exports.getPosts = async (req, res) => {
 exports.postPosts = [
   postValidation,
   async (req, res) => {
-    const errors = vaildationResult(req);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
         errors: errors.array(),
