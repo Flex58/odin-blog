@@ -3,6 +3,8 @@ const passport = require("passport");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { authRouter } = require("./routers/authRouter.js");
+const { postRouter } = require("./routers/postRouter.js");
+const { commentRouter } = require("./routers/commentRouter.js");
 
 require("./config/passport.js");
 
