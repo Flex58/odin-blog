@@ -95,7 +95,7 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.refreshToken = async (req, res) => {
-  const oldToken = req.cookie("refreshToken");
+  const oldToken = req.cookies.refreshToken;
   const refreshToken = await db.getRefreshToken(oldToken);
 
   if (!refreshToken) {
@@ -114,7 +114,7 @@ exports.refreshToken = async (req, res) => {
     id: refreshToken.user.id,
   };
 
-  await db.deleteRefreshToken(refreshToken);
+  await db.deleteRefreshToken(refreshToken.token);
   const newAccessToken = issueAccessToken(payload);
   const { refreshToken: newRefreshToken, maxAge } = await createRefreshToken(
     payload.id,
