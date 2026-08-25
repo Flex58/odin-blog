@@ -12,7 +12,7 @@ const formValidation = [
 ];
 
 exports.getComments = async (req, res) => {
-  const data = db.getComments();
+  const data = await db.getComments();
   if (!data) {
     return res.status(500);
   }
@@ -35,7 +35,7 @@ exports.postComment = [
 ];
 
 exports.deleteComment = async (req, res) => {
-  const commentId = parseInt(req.body.commentId);
+  const commentId = parseInt(req.params.commentId);
   await db.deleteComment(commentId);
   return res.status(200).json({ message: "Comment deleted" });
 };
