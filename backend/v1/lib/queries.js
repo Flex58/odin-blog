@@ -91,3 +91,18 @@ exports.createPost = async (data, authorId) => {
   });
   return post;
 };
+
+exports.updatePost = async (postId, data, authorId) => {
+  const post = await prisma.posts.update({
+    where: {
+      postId,
+      authorId,
+    },
+    data: {
+      title: data.title,
+      text: data.text,
+      published: data.published,
+    },
+  });
+  return post;
+};
