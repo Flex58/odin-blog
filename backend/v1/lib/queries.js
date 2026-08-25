@@ -115,3 +115,12 @@ exports.deletePost = async (id) => {
   });
   return data;
 };
+
+exports.getSpecificPost = async (id) => {
+  const data = await prisma.posts.findUnique({
+    where: {
+      id,
+    },
+  });
+  return data;
+};
