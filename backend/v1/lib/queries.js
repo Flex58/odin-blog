@@ -87,6 +87,7 @@ exports.createPost = async (data, authorId) => {
       text: data.content,
       published: data.published,
       authorId,
+      upload: Date.now(),
     },
   });
   return post;
