@@ -154,3 +154,13 @@ exports.whoAmI = (req, res) => {
     author: req.user.author,
   });
 };
+
+exports.setAuthor = async (req, res) => {
+  const key = req.get("Author-Key");
+  if (key === process.env.AUTHOR_KEY) {
+    await db.updateAuthor(req.user.id, true);
+    return res.status(200).json({ message: "Author status updated" });
+  } else {
+    return res.status(403).json({ message: "Author Key does not match" });
+  }
+};
