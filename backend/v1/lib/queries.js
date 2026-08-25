@@ -129,3 +129,8 @@ exports.getSpecificPost = async (id) => {
   });
   return data;
 };
+
+exports.getComments = async () => {
+  const data = await prisma.comments.findMany();
+  return data;
+};
