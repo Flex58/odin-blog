@@ -134,3 +134,15 @@ exports.getComments = async () => {
   const data = await prisma.comments.findMany();
   return data;
 };
+
+exports.createComment = async (data, authorId) => {
+  const post = await prisma.comments.create({
+    data: {
+      text: data.content,
+      upload: Date.now(),
+      authorId,
+      postId: data.postId,
+    },
+  });
+  return post;
+};
