@@ -17,6 +17,8 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/comments", commentRouter);
 
 app.listen(PORT, (err) => {
   if (err) {
