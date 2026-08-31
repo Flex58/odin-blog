@@ -83,6 +83,12 @@ exports.loginUser = async (req, res) => {
 
   const accessToken = issueAccessToken(payload);
   const { refreshToken, maxAge } = await createRefreshToken(user.id);
+  const userObject = {
+    email: user.email,
+    id: user.id,
+    name: user.name,
+    author: user.author,
+  };
   return res
     .status(200)
     .cookie("refreshToken", refreshToken, {
@@ -91,7 +97,7 @@ exports.loginUser = async (req, res) => {
       sameSite: "strict",
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
     })
-    .json({ accessToken });
+    .json({ accessToken, userObject });
 };
 
 exports.refreshToken = async (req, res) => {
@@ -131,7 +137,7 @@ exports.refreshToken = async (req, res) => {
       sameSite: "strict",
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
     })
-    .json({ accessToken: newAccessToken, user: req.user });
+    .json({ accessToken: newAccessToken, user: refreshToken.user });
 };
 
 exports.logoutUser = async (req, res) => {
