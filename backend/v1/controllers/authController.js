@@ -96,6 +96,9 @@ exports.loginUser = async (req, res) => {
 
 exports.refreshToken = async (req, res) => {
   const oldToken = req.cookies.refreshToken;
+  if (!oldToken) {
+    return res.status(401).json({ error: "No refreshToken cookie set" });
+  }
   const refreshToken = await db.getRefreshToken(oldToken);
 
   if (!refreshToken) {
