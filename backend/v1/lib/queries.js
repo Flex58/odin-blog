@@ -48,7 +48,11 @@ exports.getRefreshToken = async (token) => {
       token,
     },
     include: {
-      user: true,
+      user: {
+        omit: {
+          password: true,
+        },
+      },
     },
   });
   return data;
