@@ -131,7 +131,7 @@ exports.refreshToken = async (req, res) => {
       sameSite: "strict",
       maxAge: maxAge * 1000, //14 days in MS expiry also declaed in createRefreshToken
     })
-    .json({ accessToken: newAccessToken });
+    .json({ accessToken: newAccessToken, user: req.user });
 };
 
 exports.logoutUser = async (req, res) => {
